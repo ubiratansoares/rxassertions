@@ -17,22 +17,21 @@ This library mimics and improves the original Ribot`s idea with the following go
 We can see some code diet :
 
 **Regular assertions with TestSubscriber**
-
-        TestSubscriber<String> testSubscriber = new TestSubscriber<>();
-        Observable.just("RxJava", "Assertions").toBlocking().subscribe(testSubscriber);
-        testSubscriber.assertCompleted();
-        testSubscriber.assertNoErrors();
-        testSubscriber.assertValues("RxJava", "Assertions");
-
-
+```java
+TestSubscriber<String> testSubscriber = new TestSubscriber<>();
+Observable.just("RxJava", "Assertions").toBlocking().subscribe(testSubscriber);
+testSubscriber.assertCompleted();
+testSubscriber.assertNoErrors();
+testSubscriber.assertValues("RxJava", "Assertions");
+```
 
 **Assertions with RxAssertions**
-
-        assertThat(Observable.just("RxJava", "Assertions"))
-                .completes()
-                .withoutErrors()
-                .expectedValues("RxJava", "Assertions");
-
+```java
+assertThat(Observable.just("RxJava", "Assertions"))
+		.completes()
+		.withoutErrors()
+		.expectedValues("RxJava", "Assertions");
+```
 
 You can find other examples at `test` folder
 
