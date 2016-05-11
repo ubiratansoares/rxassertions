@@ -18,6 +18,6 @@ public class RxAssertions {
     }
 
     private RxAssertions() {
-        throw new AssertionError("No instances.");
+        throw new AssertionError("No instances, please");
     }
 }

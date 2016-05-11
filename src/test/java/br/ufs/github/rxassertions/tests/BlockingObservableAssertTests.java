@@ -4,6 +4,8 @@ import br.ufs.github.rxassertions.BlockingObservableAssert;
 import org.junit.Test;
 import rx.Observable;
 
+import java.util.Collections;
+
 /**
  * Created by ubiratansoares on 5/11/16.
  */
@@ -30,6 +32,19 @@ public class BlockingObservableAssertTests {
         new BlockingObservableAssert<>(
                 Observable.error(new RuntimeException()).toBlocking()
         ).failsWithThrowable(RuntimeException.class);
+    }
+
+    @Test(expected = AssertionError.class)
+    public void completes_ChainingWithFail_ShouldFail() {
+        new BlockingObservableAssert<>(
+                Observable.error(new RuntimeException()).toBlocking()
+        ).fails().completes();
+    }
+
+    @Test public void emitisNothingAssertion_ShouldPass() {
+        new BlockingObservableAssert<>(
+                Observable.from(Collections.emptyList()).toBlocking()
+        ).emitsNothing();
     }
 
 }

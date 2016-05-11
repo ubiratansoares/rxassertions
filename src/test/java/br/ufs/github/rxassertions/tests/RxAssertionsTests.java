@@ -12,37 +12,46 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class RxAssertionsTests {
 
-    @Test public void test_factoryMethod_BlockingObservableReturnsNotNull() {
+    @Test public void factoryMethod_BlockingObservable_ReturnsNotNull() {
         assertThat(RxAssertions.assertThat(Observable.just(1).toBlocking()))
                 .isNotNull();
     }
 
-    @Test public void test_factoryMethod_RegularObservableReturnsNotNull() {
+    @Test public void factoryMethod_RegularObservable_ReturnsNotNull() {
         assertThat(RxAssertions.assertThat(Observable.just("Test")))
                 .isNotNull();
     }
 
-    @Test public void test_EmissionsCount() {
+    @Test public void emissionsCount() {
         RxAssertions.assertThat(Observable.range(1, 10))
                 .emissionsCount(10);
     }
 
-    @Test public void test_CanChain_TwoAssertions() {
+    @Test public void canChain_TwoAssertions() {
         RxAssertions.assertThat(Observable.range(1, 5))
                 .emissionsCount(5)
                 .completes();
     }
 
-    @Test public void test_SimpleFail() {
+    @Test public void simpleFail() {
         RxAssertions.assertThat(Observable.error(new IllegalArgumentException()))
                 .fails();
-
     }
 
-    @Test public void test_FailWithException() {
+    @Test public void failWithException() {
         RxAssertions.assertThat(Observable.error(new IllegalArgumentException()))
                 .failsWithThrowable(IllegalArgumentException.class);
+    }
 
+    @Test public void noEmissions() {
+        RxAssertions.assertThat(Observable.empty())
+                .emitsNothing();
+    }
+
+    @Test public void noEmissions_Completes() {
+        RxAssertions.assertThat(Observable.empty())
+                .emitsNothing()
+                .completes();
     }
 
 }

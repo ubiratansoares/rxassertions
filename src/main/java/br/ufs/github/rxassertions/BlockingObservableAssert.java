@@ -1,8 +1,11 @@
 package br.ufs.github.rxassertions;
 
 import org.assertj.core.api.AbstractAssert;
+import rx.Notification;
 import rx.observables.BlockingObservable;
 import rx.observers.TestSubscriber;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -13,40 +16,41 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class BlockingObservableAssert<T>
         extends AbstractAssert<BlockingObservableAssert<T>, BlockingObservable<T>> {
 
-    private BlockingObservable<T> actual;
+    private List<Throwable> onErrorEvents;
+    private List<T> onNextEvents;
+    private List<Notification<T>> onCompletedEvents;
 
     public BlockingObservableAssert(BlockingObservable<T> actual) {
         super(actual, BlockingObservableAssert.class);
-        this.actual = actual;
+        TestSubscriber<T> subscriber = new TestSubscriber<>();
+        actual.subscribe(subscriber);
+        onErrorEvents = subscriber.getOnErrorEvents();
+        onNextEvents = subscriber.getOnNextEvents();
+        onCompletedEvents = subscriber.getOnCompletedEvents();
     }
 
     public BlockingObservableAssert completes() {
-        TestSubscriber<T> subscriber = newSubscriberOnActual();
-        subscriber.assertCompleted();
+        assertThat(onCompletedEvents).isNotNull().isNotEmpty();
         return this;
     }
 
     public BlockingObservableAssert emissionsCount(int count) {
-        TestSubscriber<T> subscriber = newSubscriberOnActual();
-        subscriber.assertValueCount(count);
+        assertThat(onNextEvents).hasSize(count);
         return this;
     }
 
     public BlockingObservableAssert fails() {
-        TestSubscriber<T> subscriber = newSubscriberOnActual();
-        assertThat(subscriber.getOnErrorEvents()).isNotEmpty();
+        assertThat(onErrorEvents).isNotNull().isNotEmpty();
         return this;
     }
 
     public BlockingObservableAssert failsWithThrowable(Class thowableClazz) {
-        TestSubscriber<T> subscriber = newSubscriberOnActual();
-        subscriber.assertError(thowableClazz);
+        assertThat(onErrorEvents.get(0)).isInstanceOf(thowableClazz);
         return this;
     }
 
-    private TestSubscriber<T> newSubscriberOnActual() {
-        TestSubscriber<T> subscriber = new TestSubscriber<>();
-        actual.subscribe(subscriber);
-        return subscriber;
+    public BlockingObservableAssert emitsNothing() {
+        assertThat(onNextEvents).isEmpty();
+        return this;
     }
 }
