@@ -5,7 +5,6 @@ import org.junit.Test;
 import rx.Completable;
 import rx.Observable;
 import rx.Single;
-import rx.observers.TestSubscriber;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -63,17 +62,11 @@ public class RxAssertionsTests {
                 .withoutErrors();
     }
 
-    @Test public void regularObservable_Emissions() {
+    @Test public void regularObservable_CompletesWithEmissions() {
         RxAssertions.assertThat(Observable.just("RxJava", "Assertions"))
                 .completes()
                 .withoutErrors()
                 .expectedValues("RxJava", "Assertions");
-
-        TestSubscriber<String> testSubscriber = new TestSubscriber<>();
-        Observable.just("RxJava", "Assertions").toBlocking().subscribe(testSubscriber);
-        testSubscriber.assertCompleted();
-        testSubscriber.assertNoErrors();
-        testSubscriber.assertValues("RxJava", "Assertions");
     }
 
     @Test public void completable_completesWithoutErrors() {
