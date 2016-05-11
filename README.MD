@@ -1,5 +1,7 @@
 # RxAssertions
 
+[![Status](https://travis-ci.com/ubiratansoares/rxassertions.svg?token=RHSqKpkhyMned4PZSn8q&branch=master)](https://travis-ci.org/ubiratansoares/rxassertions)  
+
 RxAssertions is a simple idea for better RxJava assertions. 
 
 I found the original idea from the guys of [Ribot](https://github.com/ribot/assertj-rx) : in fact, I think this a good idea and helps to keep tests clean.
