@@ -11,9 +11,9 @@ However, Ribot guys deprecated their original repo some time ago in favor of van
 This library mimics and improves the original Ribot`s idea with the following goodies :
 
 1. AssertJ powered assertions for RxJava (as the original one)
-2. All tests rely on `BlockingObservable` internally
-2. Internal API rely 100% on `TestSubscriber`
-3. Improved public API mirror most of TestSubscriber provided assertions
+2. All tests rely on **BlockingObservable** internally
+2. Internal API rely 100% on **TestSubscriber**
+3. Improved public API, covering most of TestSubscriber provided assertions
 4. Improved _Assertions_ entry points from factory methods, with **Observable**, **BlockingObservable**, **Single** and **Completable** support
 
 We can see some code diet :
@@ -29,10 +29,24 @@ testSubscriber.assertValues("RxJava", "Assertions");
 
 **Assertions with RxAssertions**
 ```java
-assertThat(Observable.just("RxJava", "Assertions"))
+RxAssertions.assertThat(Observable.just("RxJava", "Assertions"))
 		.completes()
 		.withoutErrors()
 		.expectedValues("RxJava", "Assertions");
+```
+or
+
+```java
+RxAssertions.assertThat(Observable.empty())
+		.emitsNothing()
+		.completes()
+		.withoutErrors();
+```
+or
+
+```java
+Single<String> single = Single.fromCallable(() -> "RxJava");
+RxAssertions.assertThat(single).completes().expectedSingleValue("RxJava");
 ```
 
 You can find other examples at `test` folder
@@ -53,7 +67,7 @@ Add the dependency
 ```groovy
 dependencies {
 	...
-	compile 'com.github.ubiratansoares:rxassertions:0.2.0'
+	testCompile 'com.github.ubiratansoares:rxassertions:0.2.0'
 }
 ```
 RxAssertions uses RxJava `1.1.5` and AssertJ `2.4.1` as dependencies.
