@@ -5,6 +5,7 @@ import rx.Notification;
 import rx.observables.BlockingObservable;
 import rx.observers.TestSubscriber;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,8 +35,13 @@ public class BlockingObservableAssert<T>
         return this;
     }
 
+    public BlockingObservableAssert notCompletes() {
+        assertThat(onCompletedEvents).isNullOrEmpty();
+        return this;
+    }
+
     public BlockingObservableAssert emissionsCount(int count) {
-        assertThat(onNextEvents).hasSize(count);
+        assertThat(onNextEvents).isNotNull().isNotEmpty().hasSize(count);
         return this;
     }
 
@@ -45,6 +51,7 @@ public class BlockingObservableAssert<T>
     }
 
     public BlockingObservableAssert failsWithThrowable(Class thowableClazz) {
+        assertThat(onErrorEvents).isNotNull();
         assertThat(onErrorEvents.get(0)).isInstanceOf(thowableClazz);
         return this;
     }
@@ -53,4 +60,36 @@ public class BlockingObservableAssert<T>
         assertThat(onNextEvents).isEmpty();
         return this;
     }
+
+    public BlockingObservableAssert receivedTerminalEvent() {
+        assertThat(onCompletedEvents).isNotNull();
+        assertThat(onErrorEvents).isNotNull();
+        assertThat(onCompletedEvents.size() + onErrorEvents.size()).isEqualTo(1);
+        return this;
+    }
+
+    public BlockingObservableAssert withoutErrors() {
+        assertThat(onErrorEvents).isNotNull().isEmpty();
+        return this;
+    }
+
+    public BlockingObservableAssert singleValueExpected(T expected) {
+        assertThat(onNextEvents)
+                .isNotNull()
+                .isNotEmpty()
+                .hasSize(1);
+
+        assertThat(onNextEvents.get(0)).isEqualTo(expected);
+        return this;
+    }
+
+    public BlockingObservableAssert valuesExpected(T... expected) {
+        List<T> ordered = Arrays.asList(expected);
+        assertThat(onNextEvents)
+                .isNotNull()
+                .isNotEmpty()
+                .hasSameElementsAs(ordered);
+        return this;
+    }
+
 }

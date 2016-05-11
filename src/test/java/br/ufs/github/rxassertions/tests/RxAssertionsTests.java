@@ -2,6 +2,7 @@ package br.ufs.github.rxassertions.tests;
 
 import br.ufs.github.rxassertions.RxAssertions;
 import org.junit.Test;
+import rx.Completable;
 import rx.Observable;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -39,8 +40,8 @@ public class RxAssertionsTests {
     }
 
     @Test public void failWithException() {
-        RxAssertions.assertThat(Observable.error(new IllegalArgumentException()))
-                .failsWithThrowable(IllegalArgumentException.class);
+        RxAssertions.assertThat(Observable.error(new IllegalStateException()))
+                .failsWithThrowable(IllegalStateException.class);
     }
 
     @Test public void noEmissions() {
@@ -52,6 +53,13 @@ public class RxAssertionsTests {
         RxAssertions.assertThat(Observable.empty())
                 .emitsNothing()
                 .completes();
+    }
+
+    @Test public void completable_completesWithoutErrors() {
+        RxAssertions.assertThat(
+                Completable.fromObservable(Observable.range(1, 5)))
+                .completes()
+                .withoutErrors();
     }
 
 }
