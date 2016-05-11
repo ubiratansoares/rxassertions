@@ -1,6 +1,10 @@
 apply plugin: 'java'
 apply plugin: 'maven'
 
+group = 'com.github.ubiratansoares'
+
+sourceCompatibility = 1.8
+
 repositories {
     mavenCentral()
 }
