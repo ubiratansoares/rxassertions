@@ -1,0 +1,11 @@
+language: java
+
+cache:
+  directories:
+    - $HOME/.gradle
+    - $HOME/.m2
+
+jdk: oraclejdk8
+
+script:
+    - ./gradlew test
