@@ -39,7 +39,24 @@ You can find other examples at `test` folder
 
 # Setup
 
-// Todo
+Add it in your `build.gradle`
+
+```groovy
+repositories {
+	...
+	maven { url "https://jitpack.io" }
+
+}
+```
+Add the dependency
+
+```groovy
+dependencies {
+	...
+	compile 'com.github.ubiratansoares:rxassertions:0.2.0'
+}
+```
+RxAssertions uses RxJava `1.1.5` and AssertJ `2.4.1` as dependencies.
 
 # Contributing
 
