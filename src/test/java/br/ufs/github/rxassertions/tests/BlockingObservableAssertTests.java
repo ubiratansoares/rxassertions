@@ -68,19 +68,19 @@ public class BlockingObservableAssertTests {
 
     @Test public void withExpectedSingleValue_ShouldPass() {
         BlockingObservable<String> obs = Observable.just("Expected").toBlocking();
-        new BlockingObservableAssert<>(obs).singleValueExpected("Expected");
+        new BlockingObservableAssert<>(obs).expectedSingleValue("Expected");
     }
 
     @Test(expected = AssertionError.class)
     public void withUnexpectedSingleValue_ShouldFail() {
         BlockingObservable<String> obs = Observable.just("Unexpected").toBlocking();
-        new BlockingObservableAssert<>(obs).singleValueExpected("Expected");
+        new BlockingObservableAssert<>(obs).expectedSingleValue("Expected");
     }
 
     @Test public void withExpectedMultipleValues_ShouldPass() {
         List<String> expected = Arrays.asList("Expected", "Values");
         BlockingObservable<String> obs = Observable.from(expected).toBlocking();
-        new BlockingObservableAssert<>(obs).valuesExpected("Expected", "Values");
+        new BlockingObservableAssert<>(obs).expectedValues("Expected", "Values");
     }
 
 

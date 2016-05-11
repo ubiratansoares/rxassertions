@@ -30,50 +30,50 @@ public class BlockingObservableAssert<T>
         onCompletedEvents = subscriber.getOnCompletedEvents();
     }
 
-    public BlockingObservableAssert completes() {
+    public BlockingObservableAssert<T> completes() {
         assertThat(onCompletedEvents).isNotNull().isNotEmpty();
         return this;
     }
 
-    public BlockingObservableAssert notCompletes() {
+    public BlockingObservableAssert<T> notCompletes() {
         assertThat(onCompletedEvents).isNullOrEmpty();
         return this;
     }
 
-    public BlockingObservableAssert emissionsCount(int count) {
+    public BlockingObservableAssert<T> emissionsCount(int count) {
         assertThat(onNextEvents).isNotNull().isNotEmpty().hasSize(count);
         return this;
     }
 
-    public BlockingObservableAssert fails() {
+    public BlockingObservableAssert<T> fails() {
         assertThat(onErrorEvents).isNotNull().isNotEmpty();
         return this;
     }
 
-    public BlockingObservableAssert failsWithThrowable(Class thowableClazz) {
+    public BlockingObservableAssert<T> failsWithThrowable(Class thowableClazz) {
         assertThat(onErrorEvents).isNotNull();
         assertThat(onErrorEvents.get(0)).isInstanceOf(thowableClazz);
         return this;
     }
 
-    public BlockingObservableAssert emitsNothing() {
+    public BlockingObservableAssert<T> emitsNothing() {
         assertThat(onNextEvents).isEmpty();
         return this;
     }
 
-    public BlockingObservableAssert receivedTerminalEvent() {
+    public BlockingObservableAssert<T> receivedTerminalEvent() {
         assertThat(onCompletedEvents).isNotNull();
         assertThat(onErrorEvents).isNotNull();
         assertThat(onCompletedEvents.size() + onErrorEvents.size()).isEqualTo(1);
         return this;
     }
 
-    public BlockingObservableAssert withoutErrors() {
+    public BlockingObservableAssert<T> withoutErrors() {
         assertThat(onErrorEvents).isNotNull().isEmpty();
         return this;
     }
 
-    public BlockingObservableAssert singleValueExpected(T expected) {
+    public BlockingObservableAssert<T> expectedSingleValue(T expected) {
         assertThat(onNextEvents)
                 .isNotNull()
                 .isNotEmpty()
@@ -83,7 +83,7 @@ public class BlockingObservableAssert<T>
         return this;
     }
 
-    public BlockingObservableAssert valuesExpected(T... expected) {
+    public BlockingObservableAssert<T> expectedValues(T... expected) {
         List<T> ordered = Arrays.asList(expected);
         assertThat(onNextEvents)
                 .isNotNull()
