@@ -16,3 +16,10 @@ dependencies {
     testCompile "io.reactivex:rxjava:$RXJAVA_VERSION"
     testCompile "org.assertj:assertj-core:$ASSERTJ_VERSION"
 }
+
+test {
+    testLogging {
+        events 'passed', 'skipped', 'failed', 'standardOut', 'standardError'
+        exceptionFormat 'full'
+    }
+}

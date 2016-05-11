@@ -33,4 +33,16 @@ public class RxAssertionsTests {
                 .completes();
     }
 
+    @Test public void test_SimpleFail() {
+        RxAssertions.assertThat(Observable.error(new IllegalArgumentException()))
+                .fails();
+
+    }
+
+    @Test public void test_FailWithException() {
+        RxAssertions.assertThat(Observable.error(new IllegalArgumentException()))
+                .failsWithThrowable(IllegalArgumentException.class);
+
+    }
+
 }
