@@ -67,7 +67,7 @@ Add the dependency
 ```groovy
 dependencies {
 	...
-	testCompile 'com.github.ubiratansoares:rxassertions:0.2.0'
+	testCompile 'com.github.ubiratansoares:rxassertions:0.2.1'
 }
 ```
 RxAssertions uses RxJava `1.1.5` and AssertJ `2.4.1` as dependencies.
