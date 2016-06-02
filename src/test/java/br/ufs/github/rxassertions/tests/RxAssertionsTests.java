@@ -1,10 +1,15 @@
 package br.ufs.github.rxassertions.tests;
 
 import br.ufs.github.rxassertions.RxAssertions;
+import org.assertj.core.api.Condition;
+import org.assertj.core.data.Index;
 import org.junit.Test;
 import rx.Completable;
 import rx.Observable;
 import rx.Single;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -81,4 +86,72 @@ public class RxAssertionsTests {
         RxAssertions.assertThat(single).completes().expectedSingleValue("RxJava");
     }
 
+    @Test public void multipleEmissions_AreMatchedOnCondition() {
+        List<String> expected = Arrays.asList("These", "are", "Expected", "Values");
+        Observable<String> values = Observable.from(expected);
+
+        Condition<String> notNullAndNotEmpty = new Condition<String>() {
+            @Override public boolean matches(String value) {
+                return value != null && !value.isEmpty();
+            }
+        };
+
+        RxAssertions.assertThat(values)
+                .completes()
+                .eachItemAre(notNullAndNotEmpty);
+    }
+
+    @Test public void singleEmission_IsMatchedOnCondition() {
+        List<String> expected = Arrays.asList("These", "are", "the", "values");
+        Observable<String> values = Observable.from(expected);
+
+        Condition<String> withThreeChars = new Condition<String>() {
+            @Override public boolean matches(String value) {
+                return value != null && value.length() == 3;
+            }
+        };
+
+        RxAssertions.assertThat(values)
+                .completes()
+                .atLeastOneItem(withThreeChars);
+    }
+
+    @Test public void multipleEmissions_AreNotMatchedOnCondition() {
+        List<String> expected = Arrays.asList("These", "are", "Expected", "Values");
+        Observable<String> values = Observable.from(expected);
+
+        Condition<String> greaterThanTen = new Condition<String>() {
+            @Override public boolean matches(String value) {
+                return value != null && value.length() > 10;
+            }
+        };
+
+        RxAssertions.assertThat(values)
+                .completes()
+                .allItemsNotAre(greaterThanTen);
+    }
+
+    @Test public void emission_AreMatchedAtIndex() {
+        List<String> expected = Arrays.asList("RxJava", "is", "awesome");
+        Observable<String> values = Observable.from(expected);
+
+        Condition<String> exactlyThreeChars = new Condition<String>() {
+            @Override public boolean matches(String value) {
+                return value != null && value.length() == 2;
+            }
+        };
+
+        RxAssertions.assertThat(values)
+                .completes()
+                .emitsOnIndex(exactlyThreeChars, Index.atIndex(1));
+    }
+
+    @Test public void emissions_Contains_DesiredValues() {
+        Observable<Integer> values = Observable.range(1, 100);
+
+        RxAssertions.assertThat(values)
+                .completes()
+                .emits(10)
+                .emits(20);
+    }
 }
