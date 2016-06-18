@@ -1,6 +1,8 @@
 package br.ufs.github.rxassertions.tests;
 
 import br.ufs.github.rxassertions.BlockingObservableAssert;
+import org.assertj.core.api.Condition;
+import org.assertj.core.data.Index;
 import org.junit.Test;
 import rx.Observable;
 import rx.observables.BlockingObservable;
@@ -83,5 +85,91 @@ public class BlockingObservableAssertTests {
         new BlockingObservableAssert<>(obs).expectedValues("Expected", "Values");
     }
 
+    @Test public void withConditionsMatchingEachItem_ShoulPass() {
+        List<String> expected = Arrays.asList("These", "are", "Expected", "Values");
+        BlockingObservable<String> obs = Observable.from(expected).toBlocking();
 
+        Condition<String> atLeastTwoChars = new Condition<String>() {
+            @Override public boolean matches(String value) {
+                return value.length() >= 2;
+            }
+        };
+
+        Condition<String> noMoreThanTenChars = new Condition<String>() {
+            @Override public boolean matches(String value) {
+                return value.length() <= 10;
+            }
+        };
+
+        new BlockingObservableAssert<>(obs)
+                .eachItemAre(atLeastTwoChars)
+                .eachItemAre(noMoreThanTenChars);
+    }
+
+    @Test public void withConditionsMatchingOnlyOneItem_ShoulPass() {
+        List<String> expected = Arrays.asList("These", "are", "Expected", "Values");
+        BlockingObservable<String> obs = Observable.from(expected).toBlocking();
+
+        Condition<String> exactlyThreeChars = new Condition<String>() {
+            @Override public boolean matches(String value) {
+                return value.length() == 3;
+            }
+        };
+
+        new BlockingObservableAssert<>(obs)
+                .atLeastOneItem(exactlyThreeChars);
+    }
+
+    @Test public void withConditionsNotMatchingAnyItems_ShoulPass() {
+        List<String> expected = Arrays.asList("These", "are", "Expected", "Values");
+        BlockingObservable<String> obs = Observable.from(expected).toBlocking();
+
+        Condition<String> nullString = new Condition<String>() {
+            @Override public boolean matches(String value) {
+                return value == null;
+            }
+        };
+
+        new BlockingObservableAssert<>(obs)
+                .allItemsNotAre(nullString);
+    }
+
+    @Test(expected = AssertionError.class)
+    public void withConditionsNotMathchingEachItem_ShouldFail() {
+        List<String> expected = Arrays.asList("These", "two");
+        BlockingObservable<String> obs = Observable.from(expected).toBlocking();
+
+        Condition<String> moreThanFourChars = new Condition<String>() {
+            @Override public boolean matches(String value) {
+                return value.length() >= 4;
+            }
+        };
+
+        new BlockingObservableAssert<>(obs).eachItemAre(moreThanFourChars);
+    }
+
+    @Test public void withConditionAtIndex_ShouldPass() {
+        List<String> expected = Arrays.asList("These", "are", "Expected", "Values");
+        BlockingObservable<String> obs = Observable.from(expected).toBlocking();
+
+        Condition<String> threeChars = new Condition<String>() {
+            @Override public boolean matches(String value) {
+                return value.length() == 3;
+            }
+        };
+
+        new BlockingObservableAssert<>(obs).emitsOnIndex(threeChars, Index.atIndex(1));
+    }
+
+    @Test public void withContains_ShoudPass() {
+        List<String> expected = Arrays.asList("Expected", "Values");
+        BlockingObservable<String> obs = Observable.from(expected).toBlocking();
+        new BlockingObservableAssert<>(obs).emits("Values");
+    }
+
+    @Test(expected = AssertionError.class) public void withContains_ShoudFail() {
+        List<String> expected = Arrays.asList("Expected", "Values");
+        BlockingObservable<String> obs = Observable.from(expected).toBlocking();
+        new BlockingObservableAssert<>(obs).emits("RxJava");
+    }
 }

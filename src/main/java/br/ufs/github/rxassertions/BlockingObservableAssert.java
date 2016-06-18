@@ -1,6 +1,8 @@
 package br.ufs.github.rxassertions;
 
 import org.assertj.core.api.AbstractAssert;
+import org.assertj.core.api.Condition;
+import org.assertj.core.data.Index;
 import rx.Notification;
 import rx.observables.BlockingObservable;
 import rx.observers.TestSubscriber;
@@ -93,6 +95,31 @@ public class BlockingObservableAssert<T>
                 .isNotNull()
                 .isNotEmpty()
                 .hasSameElementsAs(ordered);
+        return this;
+    }
+
+    public BlockingObservableAssert<T> eachItemAre(Condition<? super T> condition) {
+        assertThat(onNextEvents).are(condition);
+        return this;
+    }
+
+    public BlockingObservableAssert<T> atLeastOneItem(Condition<? super T> condition) {
+        assertThat(onNextEvents).areAtLeast(1, condition);
+        return this;
+    }
+
+    public BlockingObservableAssert<T> allItemsNotAre(Condition<? super T> condition) {
+        assertThat(onNextEvents).areNot(condition);
+        return this;
+    }
+
+    public BlockingObservableAssert<T> emitsOnIndex(Condition<? super T> condition, Index index) {
+        assertThat(onNextEvents).has(condition, index);
+        return this;
+    }
+
+    public BlockingObservableAssert<T> emits(T... values) {
+        assertThat(onNextEvents).contains(values);
         return this;
     }
 
