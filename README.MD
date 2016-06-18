@@ -37,7 +37,7 @@ RxAssertions.assertThat(Observable.just("RxJava", "Assertions"))
 or
 
 ```java
-RxAssertions.assertThat(Observable.empty())
+assertThat(Observable.empty())
 		.emitsNothing()
 		.completes()
 		.withoutErrors();
@@ -46,7 +46,7 @@ or
 
 ```java
 Single<String> single = Single.fromCallable(() -> "RxJava");
-RxAssertions.assertThat(single).completes().expectedSingleValue("RxJava");
+assertThat(single).completes().expectedSingleValue("RxJava");
 ```
 
 You can find other examples at `test` folder
@@ -67,9 +67,12 @@ Add the dependency
 ```groovy
 dependencies {
 	...
-	testCompile 'com.github.ubiratansoares:rxassertions:0.2.1'
+	testCompile 'com.github.ubiratansoares:rxassertions:$version'
 }
 ```
+
+Check the releases tab for the latest version.
+
 RxAssertions uses RxJava `1.1.5` and AssertJ `2.4.1` as dependencies.
 
 # Contributing
