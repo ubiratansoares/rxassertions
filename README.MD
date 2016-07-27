@@ -16,7 +16,7 @@ This library mimics and improves the original Ribot`s idea with the following go
 3. Improved public API, covering most of TestSubscriber provided assertions
 4. Improved _Assertions_ entry points from factory methods, with **Observable**, **BlockingObservable**, **Single** and **Completable** support
 
-We can see some code diet :
+Lets see some code diet :
 
 **Regular assertions with TestSubscriber**
 ```java
@@ -73,7 +73,11 @@ dependencies {
 
 Check the releases tab for the latest version.
 
-RxAssertions uses RxJava `1.1.5` and AssertJ `2.4.1` as dependencies.
+RxAssertions uses RxJava `1.1.7` and AssertJ `2.5.0` as dependencies.
+
+# Experimental
+
+Since `v0.3.0`, we have some assertions leveraging on AssertJ **Conditions** API. This kind of assertions offers flexible matching both for emissions or error checking. You can find samples at `test` folder.
 
 # Contributing
 
