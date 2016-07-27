@@ -2,7 +2,6 @@ package br.ufs.github.rxassertions.tests;
 
 import br.ufs.github.rxassertions.RxAssertions;
 import org.assertj.core.api.Condition;
-import org.assertj.core.data.Index;
 import org.junit.Test;
 import rx.Completable;
 import rx.Observable;
@@ -113,7 +112,7 @@ public class RxAssertionsTests {
 
         RxAssertions.assertThat(values)
                 .completes()
-                .atLeastOneItem(withThreeChars);
+                .oneEmissionMatches(withThreeChars);
     }
 
     @Test public void multipleEmissions_AreNotMatchedOnCondition() {
@@ -129,21 +128,6 @@ public class RxAssertionsTests {
         RxAssertions.assertThat(values)
                 .completes()
                 .allItemsNotAre(greaterThanTen);
-    }
-
-    @Test public void emission_AreMatchedAtIndex() {
-        List<String> expected = Arrays.asList("RxJava", "is", "awesome");
-        Observable<String> values = Observable.from(expected);
-
-        Condition<String> exactlyThreeChars = new Condition<String>() {
-            @Override public boolean matches(String value) {
-                return value != null && value.length() == 2;
-            }
-        };
-
-        RxAssertions.assertThat(values)
-                .completes()
-                .emitsOnIndex(exactlyThreeChars, Index.atIndex(1));
     }
 
     @Test public void emissions_Contains_DesiredValues() {

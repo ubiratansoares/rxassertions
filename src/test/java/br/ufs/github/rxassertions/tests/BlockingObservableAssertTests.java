@@ -2,7 +2,6 @@ package br.ufs.github.rxassertions.tests;
 
 import br.ufs.github.rxassertions.BlockingObservableAssert;
 import org.assertj.core.api.Condition;
-import org.assertj.core.data.Index;
 import org.junit.Test;
 import rx.Observable;
 import rx.observables.BlockingObservable;
@@ -116,8 +115,7 @@ public class BlockingObservableAssertTests {
             }
         };
 
-        new BlockingObservableAssert<>(obs)
-                .atLeastOneItem(exactlyThreeChars);
+        new BlockingObservableAssert<>(obs).oneEmissionMatches(exactlyThreeChars);
     }
 
     @Test public void withConditionsNotMatchingAnyItems_ShoulPass() {
@@ -130,8 +128,7 @@ public class BlockingObservableAssertTests {
             }
         };
 
-        new BlockingObservableAssert<>(obs)
-                .allItemsNotAre(nullString);
+        new BlockingObservableAssert<>(obs).allItemsNotAre(nullString);
     }
 
     @Test(expected = AssertionError.class)
@@ -148,19 +145,6 @@ public class BlockingObservableAssertTests {
         new BlockingObservableAssert<>(obs).eachItemAre(moreThanFourChars);
     }
 
-    @Test public void withConditionAtIndex_ShouldPass() {
-        List<String> expected = Arrays.asList("These", "are", "Expected", "Values");
-        BlockingObservable<String> obs = Observable.from(expected).toBlocking();
-
-        Condition<String> threeChars = new Condition<String>() {
-            @Override public boolean matches(String value) {
-                return value.length() == 3;
-            }
-        };
-
-        new BlockingObservableAssert<>(obs).emitsOnIndex(threeChars, Index.atIndex(1));
-    }
-
     @Test public void withContains_ShoudPass() {
         List<String> expected = Arrays.asList("Expected", "Values");
         BlockingObservable<String> obs = Observable.from(expected).toBlocking();
@@ -171,5 +155,19 @@ public class BlockingObservableAssertTests {
         List<String> expected = Arrays.asList("Expected", "Values");
         BlockingObservable<String> obs = Observable.from(expected).toBlocking();
         new BlockingObservableAssert<>(obs).emits("RxJava");
+    }
+
+    @Test public void failsAssertion_WithCondition_ShouldPass() {
+        BlockingObservable obs =
+                Observable.error(new NullPointerException("Desired message"))
+                        .toBlocking();
+
+        Condition<Throwable> messageChecking = new Condition<Throwable>() {
+            @Override public boolean matches(Throwable value) {
+                return value.getMessage().contains("Desired message");
+            }
+        };
+
+        new BlockingObservableAssert<>(obs).failsWithCondition(messageChecking);
     }
 }

@@ -2,7 +2,6 @@ package br.ufs.github.rxassertions;
 
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.api.Condition;
-import org.assertj.core.data.Index;
 import rx.Notification;
 import rx.observables.BlockingObservable;
 import rx.observers.TestSubscriber;
@@ -103,7 +102,7 @@ public class BlockingObservableAssert<T>
         return this;
     }
 
-    public BlockingObservableAssert<T> atLeastOneItem(Condition<? super T> condition) {
+    public BlockingObservableAssert<T> oneEmissionMatches(Condition<? super T> condition) {
         assertThat(onNextEvents).areAtLeast(1, condition);
         return this;
     }
@@ -113,14 +112,13 @@ public class BlockingObservableAssert<T>
         return this;
     }
 
-    public BlockingObservableAssert<T> emitsOnIndex(Condition<? super T> condition, Index index) {
-        assertThat(onNextEvents).has(condition, index);
-        return this;
-    }
-
     public BlockingObservableAssert<T> emits(T... values) {
         assertThat(onNextEvents).contains(values);
         return this;
     }
 
+    public BlockingObservableAssert<T> failsWithCondition(Condition<? super Throwable> condition) {
+        assertThat(onErrorEvents).areAtLeast(1, condition);
+        return this;
+    }
 }
