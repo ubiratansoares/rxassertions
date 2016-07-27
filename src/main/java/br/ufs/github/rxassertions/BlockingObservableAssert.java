@@ -1,124 +1,94 @@
 package br.ufs.github.rxassertions;
 
-import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.api.Condition;
-import rx.Notification;
 import rx.observables.BlockingObservable;
-import rx.observers.TestSubscriber;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Created by ubiratansoares on 5/11/16.
  */
 
-public class BlockingObservableAssert<T>
-        extends AbstractAssert<BlockingObservableAssert<T>, BlockingObservable<T>> {
+public class BlockingObservableAssert<T> {
 
-    private List<Throwable> onErrorEvents;
-    private List<T> onNextEvents;
-    private List<Notification<T>> onCompletedEvents;
+    private TestSubscriberAssertionsWrapper<T> wrapper;
 
     public BlockingObservableAssert(BlockingObservable<T> actual) {
-        super(actual, BlockingObservableAssert.class);
-        TestSubscriber<T> subscriber = new TestSubscriber<>();
-        actual.subscribe(subscriber);
-        onErrorEvents = subscriber.getOnErrorEvents();
-        onNextEvents = subscriber.getOnNextEvents();
-        onCompletedEvents = subscriber.getOnCompletedEvents();
+        wrapper = new TestSubscriberAssertionsWrapper<>(actual);
     }
 
     public BlockingObservableAssert<T> completes() {
-        assertThat(onCompletedEvents).isNotNull().isNotEmpty();
+        wrapper.completes();
         return this;
     }
 
     public BlockingObservableAssert<T> notCompletes() {
-        assertThat(onCompletedEvents).isNullOrEmpty();
+        wrapper.notCompletes();
         return this;
     }
 
     public BlockingObservableAssert<T> emissionsCount(int count) {
-        assertThat(onNextEvents).isNotNull().isNotEmpty().hasSize(count);
+        wrapper.emissionsCount(count);
         return this;
     }
 
     public BlockingObservableAssert<T> fails() {
-        assertThat(onErrorEvents).isNotNull().isNotEmpty();
+        wrapper.fails();
         return this;
     }
 
     public BlockingObservableAssert<T> failsWithThrowable(Class thowableClazz) {
-        assertThat(onErrorEvents).isNotNull();
-        assertThat(onErrorEvents.get(0)).isInstanceOf(thowableClazz);
+        wrapper.failsWithThrowable(thowableClazz);
         return this;
     }
 
     public BlockingObservableAssert<T> emitsNothing() {
-        assertThat(onNextEvents).isEmpty();
+        wrapper.emitsNothing();
         return this;
     }
 
     public BlockingObservableAssert<T> receivedTerminalEvent() {
-        assertThat(onCompletedEvents).isNotNull();
-        assertThat(onErrorEvents).isNotNull();
-        assertThat(onCompletedEvents.size() + onErrorEvents.size()).isEqualTo(1);
+        wrapper.receivedTerminalEvent();
         return this;
     }
 
     public BlockingObservableAssert<T> withoutErrors() {
-        assertThat(onErrorEvents).isNotNull().isEmpty();
+        wrapper.withoutErrors();
         return this;
     }
 
     public BlockingObservableAssert<T> expectedSingleValue(T expected) {
-        assertThat(onNextEvents)
-                .isNotNull()
-                .isNotEmpty()
-                .hasSize(1);
-
-        assertThat(onNextEvents.get(0)).isEqualTo(expected);
+        wrapper.expectedSingleValue(expected);
         return this;
-    }
-
-    public BlockingObservableAssert<T> expectedValues(T... expected) {
-        return expectedValues(Arrays.asList(expected));
     }
 
     public BlockingObservableAssert<T> expectedValues(Collection<T> ordered) {
-        assertThat(onNextEvents)
-                .isNotNull()
-                .isNotEmpty()
-                .hasSameElementsAs(ordered);
+        wrapper.expectedValues(ordered);
         return this;
     }
 
-    public BlockingObservableAssert<T> eachItemAre(Condition<? super T> condition) {
-        assertThat(onNextEvents).are(condition);
+    public BlockingObservableAssert<T> eachItemMatches(Condition<? super T> condition) {
+        wrapper.eachItemMatches(condition);
         return this;
     }
 
     public BlockingObservableAssert<T> oneEmissionMatches(Condition<? super T> condition) {
-        assertThat(onNextEvents).areAtLeast(1, condition);
+        wrapper.oneEmissionMatches(condition);
         return this;
     }
 
-    public BlockingObservableAssert<T> allItemsNotAre(Condition<? super T> condition) {
-        assertThat(onNextEvents).areNot(condition);
+    public BlockingObservableAssert<T> allItemsNotMaching(Condition<? super T> condition) {
+        wrapper.allItemsNotMaching(condition);
         return this;
     }
 
     public BlockingObservableAssert<T> emits(T... values) {
-        assertThat(onNextEvents).contains(values);
+        wrapper.emits(values);
         return this;
     }
 
-    public BlockingObservableAssert<T> failsWithCondition(Condition<? super Throwable> condition) {
-        assertThat(onErrorEvents).areAtLeast(1, condition);
+    public BlockingObservableAssert<T> failsOnCondition(Condition<? super Throwable> condition) {
+        wrapper.failsOnCondition(condition);
         return this;
     }
 }

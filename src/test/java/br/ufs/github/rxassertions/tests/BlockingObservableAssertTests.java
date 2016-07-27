@@ -78,12 +78,6 @@ public class BlockingObservableAssertTests {
         new BlockingObservableAssert<>(obs).expectedSingleValue("Expected");
     }
 
-    @Test public void withExpectedMultipleValues_ShouldPass() {
-        List<String> expected = Arrays.asList("Expected", "Values");
-        BlockingObservable<String> obs = Observable.from(expected).toBlocking();
-        new BlockingObservableAssert<>(obs).expectedValues("Expected", "Values");
-    }
-
     @Test public void withConditionsMatchingEachItem_ShoulPass() {
         List<String> expected = Arrays.asList("These", "are", "Expected", "Values");
         BlockingObservable<String> obs = Observable.from(expected).toBlocking();
@@ -101,8 +95,8 @@ public class BlockingObservableAssertTests {
         };
 
         new BlockingObservableAssert<>(obs)
-                .eachItemAre(atLeastTwoChars)
-                .eachItemAre(noMoreThanTenChars);
+                .eachItemMatches(atLeastTwoChars)
+                .eachItemMatches(noMoreThanTenChars);
     }
 
     @Test public void withConditionsMatchingOnlyOneItem_ShoulPass() {
@@ -128,7 +122,7 @@ public class BlockingObservableAssertTests {
             }
         };
 
-        new BlockingObservableAssert<>(obs).allItemsNotAre(nullString);
+        new BlockingObservableAssert<>(obs).allItemsNotMaching(nullString);
     }
 
     @Test(expected = AssertionError.class)
@@ -142,7 +136,7 @@ public class BlockingObservableAssertTests {
             }
         };
 
-        new BlockingObservableAssert<>(obs).eachItemAre(moreThanFourChars);
+        new BlockingObservableAssert<>(obs).eachItemMatches(moreThanFourChars);
     }
 
     @Test public void withContains_ShoudPass() {
@@ -168,6 +162,6 @@ public class BlockingObservableAssertTests {
             }
         };
 
-        new BlockingObservableAssert<>(obs).failsWithCondition(messageChecking);
+        new BlockingObservableAssert<>(obs).failsOnCondition(messageChecking);
     }
 }

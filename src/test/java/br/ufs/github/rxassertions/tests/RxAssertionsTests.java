@@ -70,7 +70,7 @@ public class RxAssertionsTests {
         RxAssertions.assertThat(Observable.just("RxJava", "Assertions"))
                 .completes()
                 .withoutErrors()
-                .expectedValues("RxJava", "Assertions");
+                .emits("RxJava", "Assertions");
     }
 
     @Test public void completable_completesWithoutErrors() {
@@ -97,7 +97,7 @@ public class RxAssertionsTests {
 
         RxAssertions.assertThat(values)
                 .completes()
-                .eachItemAre(notNullAndNotEmpty);
+                .eachItemMatches(notNullAndNotEmpty);
     }
 
     @Test public void singleEmission_IsMatchedOnCondition() {
@@ -127,7 +127,7 @@ public class RxAssertionsTests {
 
         RxAssertions.assertThat(values)
                 .completes()
-                .allItemsNotAre(greaterThanTen);
+                .allItemsNotMaching(greaterThanTen);
     }
 
     @Test public void emissions_Contains_DesiredValues() {
