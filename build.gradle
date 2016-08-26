@@ -9,7 +9,7 @@ repositories {
     mavenCentral()
 }
 
-def RXJAVA_VERSION = '1.1.7'
+def RXJAVA_VERSION = '1.1.9'
 def ASSERTJ_VERSION = '2.5.0'
 
 dependencies {
