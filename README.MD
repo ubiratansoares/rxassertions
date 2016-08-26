@@ -73,11 +73,11 @@ dependencies {
 
 Check the releases tab for the latest version.
 
-RxAssertions uses RxJava `1.1.7` and AssertJ `2.5.0` as dependencies.
+RxAssertions uses RxJava `1.1.9` and AssertJ `2.5.0` as dependencies.
 
 # Experimental
 
-Since `v0.3.0`, we have some assertions leveraging on AssertJ **Conditions** API. This kind of assertions offers flexible matching both for emissions or error checking. You can find samples at `test` folder.
+Since `v0.3.0`, we have some assertions leveraging on AssertJ **Conditions** API. This kind of assertion offers flexible matching both for emissions and error checks. You can find samples at `test` folder.
 
 # Contributing
 
