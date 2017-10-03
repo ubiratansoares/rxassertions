@@ -10,7 +10,7 @@ repositories {
 }
 
 def RXJAVA_VERSION = '1.1.9'
-def ASSERTJ_VERSION = '2.5.0'
+def ASSERTJ_VERSION = '3.8.0'
 
 dependencies {
 
