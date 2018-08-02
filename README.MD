@@ -1,6 +1,8 @@
-# RxAssertions
+# [DEPRECATED] RxAssertions
 
 [![Status](https://travis-ci.org/ubiratansoares/rxassertions.svg?branch=master)](https://travis-ci.org/ubiratansoares/rxassertions)  
+
+> This project is no longer maintened / active. Thanks for all OSS people that contributed and/or provided feedback !!!
 
 RxAssertions is a simple idea for better RxJava assertions. 
 
