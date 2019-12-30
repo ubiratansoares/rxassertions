@@ -62,6 +62,11 @@ public class BlockingObservableAssert<T> {
         return this;
     }
 
+    public BlockingObservableAssert<T> expectedValues(T... ordered) {
+        wrapper.expectedValues(ordered);
+        return this;
+    }
+
     public BlockingObservableAssert<T> expectedValues(Collection<T> ordered) {
         wrapper.expectedValues(ordered);
         return this;
